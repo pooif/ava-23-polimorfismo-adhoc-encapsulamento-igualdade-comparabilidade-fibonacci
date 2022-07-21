@@ -1,57 +1,124 @@
-# Template para projetos Java usando o Visual Studio Code
+# 2.3 // Polimorfismo adhoc, Encapsulamento, Igualdade e Comparabilidade // Fibonacci
 
-Um _template_ é um projeto base, para não iniciar do zero e ter pelo menos uma estrutura mínima onde se apoiar.
+Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <>
 
-Antes de começar a desenvolver com este _template_ é necessário ter instalado o Java Software Development Kit (JDK), o editor Visual Studio Code (VSCode) e o utilitário de controle de versão de código _Git_.
+Implementar respeitando os fundamentos de Orientação a Objetos.
 
+**Tópicos desta atividade:** polimorfismo, sobrecarga, encapsulamento, visibilidade, identidade, igualdade, equals e comparable/compareTo
 
+---
 
-## Instalação e Configuração do JDK
+Implementar uma classe para gerar a sequência de Fibonacci.
 
-É necessário instalar o JDK a partir da versão 8, porém é recomendada versão 11-LTS (Long Term Support - suporte de longo prazo) ou até mesmo a 17-LTS.
+[Magic of Fibonacci](http://www.ted.com/talks/arthur_benjamin_the_magic_of_fibonacci_numbers)
 
-Para o Sistema Operacional (SO) Windows, ele pode ser obtido aqui <https://adoptium.net/?variant=openjdk11&jvmVariant=hotspot>. Siga as instruções de instalação e não esqueça de selecionar os opcionais durante o processo, especialmente a parte ⚠️ _"add Java to PATH"_.
+> Na matemática, a Sequência de Fibonacci é uma sequência de números inteiros, começando normalmente por 0 e 1, na qual, cada termo subsequente (número de Fibonacci) corresponde a soma dos dois anteriores. A sequência recebeu o nome do matemático italiano Leonardo de Pisa, mais conhecido por Fibonacci (contração do italiano filius Bonacci), que descreveu, no ano de 1202, o crescimento de uma população de coelhos, a partir desta.
+>
+> [Wikipedia](http://pt.wikipedia.org/wiki/Sequ%C3%AAncia_de_Fibonacci)
 
-Para Sistemas Operacionais Linux/Debian, como Ubuntu, Pop OS, Mint, Elementary, etc, execute no terminal o comando `sudo apt install openjdk-11-jdk`, que a mágica vai acontecer.
+Gerar a sequência `0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, ...`.
 
-Para testar a instalação, seja no Windows ou Linux, abra o _Prompt_ de Comando (cmd) ou o Terminal e execute o compilador Java com `javac -version`. A saída deve ser algo com `javac 11.0.9.1`, ou outra versão.
+Deve ser possível _"andar"_ para frente e para trás na sequência, além de obter aproximações.
 
+Para entender a especificação considere as assertivas a seguir.
 
+```java
 
-## Instalação e Configuração do Visual Studio Code (VSCode)
+int[] samples = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584};
 
-O VSCode pode ser obtido aqui: <https://code.visualstudio.com/download>. A instalação é semelhante nos Sistemas Operacionais Windows e Linux.
+Fibonacci fib1 = new Fibonacci();
+System.out.println(fib1.value() == 0);
+// sobrescreva o toString
+System.out.println(fib1.toString()); // 0
+System.out.println(fib1.toString().equals("0"));
+fib1.next();
+System.out.println(fib1.value() == 1);
+fib1.next();
+System.out.println(fib1.value() == 1);
+fib1.next();
+System.out.println(fib1.value() == 2);
+fib1.next();
+System.out.println(fib1.value() == 3);
+System.out.println(fib1.value() == 3);
+fib1.next();
+System.out.println(fib1.value() == 5);
+fib1.next();
+System.out.println(fib1.value() == 8);
+fib1.next();
+System.out.println(fib1.value() == 13);
+System.out.println(fib1); // 13
+System.out.println(fib1.toString().equals("13"));
 
-No Windows, abra o instalador e não esqueça de selecionar todos os opcionais, como _adicionar code ao path_ e _adicionar "abrir com code" ao menu_, por exemplo.
+fib1.previous();
+System.out.println(fib1.value() == 8);
+fib1.previous();
+System.out.println(fib1.value() == 5);
+System.out.println(fib1.value() == 5);
+fib1.previous(5);
+System.out.println(fib1.value() == 0);
+fib1.previous();
+System.out.println(fib1.value() == 0);
+fib1.previous(50);
+System.out.println(fib1.value() == 0);
+fib1.next(10);
+System.out.println(fib1.value() == 55);
+fib1.previous(-3);
+System.out.println(fib1.value() == 55);
+fib1.next(-3);
+System.out.println(fib1.value() == 55);
+fib1.reset();
+System.out.println(fib1.value() == 0);
 
-No Linux, abra o arquivo `.deb` baixado no gerenciador de pacotes e instale normalmente conforme instruções de seu sistema operacional.
+Fibonacci fib2 = new Fibonacci();
+for (int sample : samples) {
+  System.out.println(fib2.value() == sample);
+  fib2.next();
+}
 
-Este _template_ possui uma pasta [.vscode](.vscode) com as extensões necessárias em [extensions.json](.vscode/extensions.json) e as configurações recomendadas em [settings.json](.vscode/settings.json) para um **ambiente de ensino** (configuração didática). Fique a vontade para alterá-los como achar melhor.
+Fibonacci fib3 = new Fibonacci();
+fib3.next(13);
+System.out.println(fib3.value() == 233);
 
-A única extensão obrigatória é a _"vscjava.vscode-java-pack"_.
+Fibonacci fib4 = new Fibonacci();
+fib4.next(13);
+// sobrescrever o equals
+System.out.println(fib4.equals(fib3) == true);
+System.out.println(fib4.equals(fib2) == false);
 
-A extensão _"EditorConfig"_ é bastante recomendada. Ela funciona junto com o arquivo [.editorconfig](.editorconfig) presente neste _template_ para padronizar a formatação dos códigos-fonte.
+fib4.near(10);
+System.out.println(fib4.value() == 8);
+fib4.near(20);
+System.out.println(fib4.value() == 21);
+fib4.near(300);
+System.out.println(fib4.value() == 233);
+fib4.near(4);
+System.out.println(fib4.value() == 3);
+fib4.near(89);
+System.out.println(fib4.value() == 89);
+fib4.under(1000);
+System.out.println(fib4.value() == 987);
+fib4.above(1000);
+System.out.println(fib4.value() == 1597);
 
-Finalmente, se preferes o editor em Português, instale a extensão _Portuguese (Brazil) Language Pack for Visual Studio Code_.
+// construtor == under
+Fibonacci fib5 = new Fibonacci(300);
+System.out.println(fib5.value() == 233);
+Fibonacci fib6 = new Fibonacci(20);
+System.out.println(fib6.value() == 13);
 
+System.out.println(fib5.compareTo(fib6)  > 0); // fib5 é maior que fib6
+System.out.println(fib5.compareTo(fib5) == 0); // fib5 é igual a fib5
+System.out.println(fib5.compareTo(fib4)  < 0); // fib5 é menor que fib4
 
+// outros métodos auxiliares, implemente usando o compareTo
+System.out.println(fib5.greater(fib6) == true);
+System.out.println(fib5.less(fib6) == false);
+System.out.println(fib5.less(fib5) == false);
+System.out.println(fib5.greater(fib5) == false);
+System.out.println(fib5.equals(fib5) == true);
+```
 
-## Instalação e Configuração do Git
+**Oráculos:**
 
-O Git para Windows pode ser obtido neste link: <https://git-scm.com/download/win>. A instalação é simples e intuitiva. Como sempre, não esqueça dos opcionais, principalmente a opção _adicionar o git ao path_!
-
-Para Linux, o comando `sudo apt install git` no terminal faz tudo.
-
-Para verificar a instalação abra o _prompt_ ou um terminal e execute `git --version`. Se não acusou _"comando não encontrado"_ é porque está tudo funcionando perfeitamente.
-
-
-
-## Códigos-fonte
-
-Considere adicionar os arquivos de código-fonte `.java` no diretório [src](./src/), como o exemplo [src/App.java](./src/App.java).
-
-
-
-## Licenciamento
-
-Este _template_ é _open source_ licenciado sob a GPL, assim como todos os projetos derivados dele. Mais detalhes em [LICENÇA.md](LICENÇA.md).
+* OEIS em <http://oeis.org/A000045>.
+* Wolfram Alpha <http://www.wolframalpha.com/input/?i=is+514229+a+fibonacci+number%3F>
